@@ -22,7 +22,23 @@
                     </tr>
                 </#list>
             </tbody>
-
         </table>
+
+        <form action="/submit" method="POST">
+
+            <div>
+                <label>
+                    タイトル
+                    <input type="text" name="title">
+                </label>
+            </div>
+            <div>
+                <label>
+                    本文
+                    <textarea name="body"></textarea>
+                </label>
+            </div>
+            <button type="submit">提出</button>
+        </form>
     </body>
 </html>

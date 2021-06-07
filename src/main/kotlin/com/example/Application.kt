@@ -4,6 +4,8 @@ import freemarker.cache.ClassTemplateLoader
 import freemarker.core.HTMLOutputFormat
 import io.ktor.application.*
 import io.ktor.freemarker.*
+import io.ktor.http.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
@@ -16,16 +18,19 @@ fun Application.main(){
         outputFormat = HTMLOutputFormat.INSTANCE
     }
 
+    val records = mutableListOf<Record>()
+
     routing {
         get("/"){
-
-            val records = mutableListOf(
-                Record("Test", "testBody"),
-                Record("Test", "testBody"),
-                Record("Test", "testBody")
-            )
-
             call.respond(FreeMarkerContent("index.ftl", mapOf("records" to records), ""))
+        }
+
+        post("/submit"){
+             val params = call.receiveParameters()
+            val title = params["title"] ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val body = params["body"] ?: return@post call.respond(HttpStatusCode.BadRequest)
+
+            records.add(Record(title, body))
         }
     }
 }
