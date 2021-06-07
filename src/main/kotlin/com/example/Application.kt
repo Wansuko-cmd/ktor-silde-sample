@@ -4,7 +4,6 @@ import freemarker.cache.ClassTemplateLoader
 import freemarker.core.HTMLOutputFormat
 import io.ktor.application.*
 import io.ktor.freemarker.*
-import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
@@ -19,7 +18,14 @@ fun Application.main(){
 
     routing {
         get("/"){
-            call.respond(FreeMarkerContent("index.ftl", mapOf<String, String>(), ""))
+
+            val records = mutableListOf(
+                Record("Test", "testBody"),
+                Record("Test", "testBody"),
+                Record("Test", "testBody")
+            )
+
+            call.respond(FreeMarkerContent("index.ftl", mapOf("records" to records), ""))
         }
     }
 }
