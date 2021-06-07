@@ -8,6 +8,7 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.lang.reflect.Method
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
@@ -25,12 +26,18 @@ fun Application.main(){
             call.respond(FreeMarkerContent("index.ftl", mapOf("records" to records), ""))
         }
 
+        get("/done"){
+            call.respond(FreeMarkerContent("done.ftl", mapOf<String, String>(), ""))
+        }
+
         post("/submit"){
              val params = call.receiveParameters()
             val title = params["title"] ?: return@post call.respond(HttpStatusCode.BadRequest)
             val body = params["body"] ?: return@post call.respond(HttpStatusCode.BadRequest)
 
             records.add(Record(title, body))
+
+            call.respondRedirect("/done")
         }
     }
 }
